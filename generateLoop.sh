@@ -15,7 +15,9 @@ fi
      rm -f densecap/vis/data/*
      #rm -f densecap/vis/data/*
 
-      th densecap/run_model.lua -input_image currentImage/toCap.jpg #-gpu -1
+     cd densecap
+      th densecap/run_model.lua -input_image ../currentImage/toCap.jpg #-gpu -1
+      cd ..
       rm -f currentImage/toCap.jpg
 
       python extract-first-densecap.py
