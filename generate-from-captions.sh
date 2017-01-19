@@ -10,12 +10,15 @@ if [ "$#" -ne "1" ]; then
   exit 1
 fi
 
+cd ppgn
+echo "changed dir to ppgn"
+
 opt_layer=fc6     # This is fixed to be fc6 unless we change the generator
 act_layer=fc8     # fc8 because the LRCN extract fc8 features from AlexNet
 sentence="${1}"   # A sentence with underscores between words e.g. a_pizza_on_a_table_at_a_restaurant
 xy=0              # Spatial position for conv layers, for fc layers: xy = 0
 
-n_iters=200       # Run for N iterations
+n_iters=20       # Run for N iterations
 reset_every=0     # Reset the code every N iterations (for diversity). 0 to disable resetting.
 save_every=1      # Save a sample every N iterations. 0 to disable saving intermediate samples.
 lr=1              # Initial learning rate
@@ -39,19 +42,19 @@ captioner_definition="nets/lrcn/lrcn_word_to_preds.deploy.prototxt"
 #-----------------------
 
 # Output dir
-output_dir="web-interface/genImages/"
+output_dir="../web-interface/genImages"
 # mkdir -p ${output_dir}
 
 # Directory to store samples
 if [ "${save_every}" -gt "0" ]; then
-    sample_dir=currentImage/img/${sentence}
+    sample_dir=${output_dir}/samples
     mkdir -p ${sample_dir}
 fi
 
 ## Run a few times
 # for seed in {0..2}; do
 
-    python ppgn/sampling_caption.py \
+    python sampling_caption.py \
         --act_layer ${act_layer} \
         --opt_layer ${opt_layer} \
         --sentence ${sentence} \
@@ -93,7 +96,9 @@ fi
 # output_file=${output_dir}/${sentence}.jpg
 # montage ${output_dir}/${act_layer}_*.jpg ${output_file}
 
-mv ${output_dir}/${act_layer}_*.jpg ${output_dir}/${sentence}.jpg
-cp ${output_dir}/${sentence}.jpg currentImage/toCap.jpg
-
-readlink -f ${output_file}
+mv -f ${output_dir}/${act_layer}_*.jpg ${output_dir}/static/${sentence}.jpg
+cp -f ${output_dir}/static/${sentence}.jpg ../currentImage/toCap.jpg
+rm -rf ${output_dir}/samples
+#readlink -f ${output_file}
+cd ..
+echo "change dir back"
