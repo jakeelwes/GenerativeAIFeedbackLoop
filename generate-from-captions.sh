@@ -100,5 +100,20 @@ mv -f ${output_dir}/${act_layer}_*.jpg ${output_dir}/static/${sentence}.jpg
 cp -f ${output_dir}/static/${sentence}.jpg ../currentImage/toCap.jpg
 rm -rf ${output_dir}/samples
 #readlink -f ${output_file}
+
+
+# cat ../web-interface/results.json | jq '.results = [""]'
+
+timestamp=$(date +%s)
+sentenceSpaces=$( echo "${sentence}" | tr '_' ' ')
+
+jsonData="{\"sentence\":\"${sentenceSpaces}\", \"gifPath\":\"genImages/${sentence}.gif\", \"staticImgPath\":\"genImages/static/${sentence}.jpg\", \"timecode\":\"${timestamp}\"},"
+
+echo $jsonData >> ../web-interface/results.json
+
+# jq ".results=$jsonData" <web-interface/results.json >web-interface/results.json
+# cat web-interface/results.json | jq ".results |= .+ [${jsonData}]" >> web-interface/results.json
+
+
 cd ..
 echo "change dir back"

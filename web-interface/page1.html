@@ -1,0 +1,56 @@
+<html>
+<head>
+
+
+
+  <style>
+  .typed-cursor{
+      opacity: 1;
+      -webkit-animation: blink 0.7s infinite;
+      -moz-animation: blink 0.7s infinite;
+      animation: blink 0.7s infinite;
+  }
+  @keyframes blink{
+      0% { opacity:1; }
+      50% { opacity:0; }
+      100% { opacity:1; }
+  }
+  @-webkit-keyframes blink{
+      0% { opacity:1; }
+      50% { opacity:0; }
+      100% { opacity:1; }
+  }
+  @-moz-keyframes blink{
+      0% { opacity:1; }
+      50% { opacity:0; }
+      100% { opacity:1; }
+  }
+  </style>
+
+
+  <script
+    src="https://code.jquery.com/jquery-3.1.1.min.js"
+    integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+    crossorigin="anonymous"></script>
+  </head>
+
+</head>
+<body>
+
+  <script src="typed.js"></script>
+  <script>
+
+
+
+    $(function(){
+        $(".element").typed({
+          strings: ["green and white flowers"],
+          typeSpeed: 80
+        });
+    });
+  </script>
+
+  <div class="element"></div>
+
+</body>
+</html>
