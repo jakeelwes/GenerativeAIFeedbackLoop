@@ -1,11 +1,12 @@
 #/bin/bash
 #
-# Anh Nguyen <anh.ng8@gmail.com>
-# 2016
+# Jake Elwes <me@jakeelwes.com>
+# 2017
+# (adapted from Anh Nguyen <anh.ng8@gmail.com>)
 
 # Take in an unit number
 if [ "$#" -ne "1" ]; then
-  echo "Provide a sentence e.g. a_pizza_on_a_table_at_a_restaurant"
+  echo "Provide a sentence"
   exit 1
 fi
 
@@ -16,7 +17,7 @@ xy=0              # Spatial position for conv layers, for fc layers: xy = 0
 
 n_iters=200       # Run for N iterations
 reset_every=0     # Reset the code every N iterations (for diversity). 0 to disable resetting.
-save_every=0      # Save a sample every N iterations. 0 to disable saving intermediate samples.
+save_every=1      # Save a sample every N iterations. 0 to disable saving intermediate samples.
 lr=1              # Initial learning rate
 lr_end=1e-10      # Linearly decay toward this ending lr (e.g. for decaying toward 0, set lr_end = 1e-10)
 threshold=0       # Filter out samples below this threshold e.g. 0.98
@@ -38,20 +39,19 @@ captioner_definition="nets/lrcn/lrcn_word_to_preds.deploy.prototxt"
 #-----------------------
 
 # Output dir
-output_dir="output/${act_layer}_eps1_${epsilon1}_eps3_${epsilon3}/${sentence}"
-mkdir -p ${output_dir}
+output_dir="web-interface/genImages/"
+# mkdir -p ${output_dir}
 
 # Directory to store samples
 if [ "${save_every}" -gt "0" ]; then
-    sample_dir=${output_dir}/samples
-    rm -rf ${sample_dir}
+    sample_dir=currentImage/img/${sentence}
     mkdir -p ${sample_dir}
 fi
 
 ## Run a few times
-for seed in {0..2}; do
+# for seed in {0..2}; do
 
-    python ./sampling_caption.py \
+    python ppgn/sampling_caption.py \
         --act_layer ${act_layer} \
         --opt_layer ${opt_layer} \
         --sentence ${sentence} \
@@ -75,19 +75,25 @@ for seed in {0..2}; do
     # Plot the samples
     if [ "${save_every}" -gt "0" ]; then
 
-        f_chain=${output_dir}/${sentence}__${seed}.jpg
+        f_chain=${output_dir}/${sentence}
+
+        # f_chain=${output_dir}/${sentence}__${seed}.jpg
 
         # Make a montage of steps
-        montage `ls ${sample_dir}/*.jpg | head -40` -tile 10x -geometry +1+1 ${f_chain}
+        # montage `ls ${sample_dir}/*.jpg | head -40` -tile 10x -geometry +1+1 ${f_chain}
 
-        readlink -f ${f_chain}
+        # readlink -f ${f_chain}
+        echo "Making a gif..."
+        convert ${sample_dir}/*.jpg -delay 5 -loop 0 ${f_chain}.gif
+        readlink -f ${f_chain}.gif
     fi
-done
+# done
 
 # Combine samples into one big image
-output_file=${output_dir}/${sentence}.jpg
-montage ${output_dir}/${act_layer}_*.jpg -tile 3x -geometry +1+1 ${output_file}
+# output_file=${output_dir}/${sentence}.jpg
+# montage ${output_dir}/${act_layer}_*.jpg ${output_file}
 
-convert ${output_file} -gravity south -splice 0x10 ${output_file}
-convert $output_file -append -gravity Center -pointsize 30 label:"${sentence//_/ }" -append "$output_file"
+mv ${output_dir}/${act_layer}_*.jpg ${output_dir}/${sentence}.jpg
+cp ${output_dir}/${sentence}.jpg currentImage/toCap.jpg
+
 readlink -f ${output_file}
