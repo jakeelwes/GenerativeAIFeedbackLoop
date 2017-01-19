@@ -12,10 +12,11 @@ fi
     until [ $number -ge ${1} ]; do
       echo "Number = $number - `expr ${1} - $number` still to go"
 
-      rm densecap/vis/data/*
+     rm -f densecap/vis/data/*
+     #rm -f densecap/vis/data/*
 
       th densecap/run_model.lua -input_image currentImage/toCap.jpg #-gpu -1
-      rm currentImage/toCap.jpg
+      rm -f currentImage/toCap.jpg
 
       python extract-first-densecap.py
       value=`cat currentImage/caption.txt`

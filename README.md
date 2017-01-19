@@ -21,6 +21,9 @@ and PPGN:
 
 ##Running it
 
+Need GPU to run (can use AWS if have no GPU)
+[This docker image](https://github.com/jakeelwes/dl-docker) (Dockerfile_caffeCaptions.gpu) has the dependencies included
+
 Start with any image named 'currentImage/toCap.jpg'
 
 Then run with
