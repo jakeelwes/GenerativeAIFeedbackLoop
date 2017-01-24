@@ -112,7 +112,7 @@ sentenceSpaces=$( echo "${sentence}" | tr '_' ' ')
 
 echo ${sentenceSpaces} > ${output_dir}/${number}.txt
 
-jsonData="{\"sentence\":\"${sentenceSpaces}\", \"gifPath\":\"genImages/${sentence}.gif\", \"staticImgPath\":\"genImages/static/${sentence}.jpg\", \"timecode\":\"${timestamp}\"},"
+jsonData="{\"sentence\":\"${sentenceSpaces}\", \"number\":${number}, \"gifPath\":\"genImages/${number}.gif\", \"staticImgPath\":\"genImages/static/${number}.jpg\", \"timecode\":${timestamp}},"
 
 echo $jsonData >> ../web-interface/results.json
 
