@@ -16,7 +16,7 @@ fi
      #rm -f densecap/vis/data/*
 
      cd densecap
-      th densecap/run_model.lua -input_image ../currentImage/toCap.jpg #-gpu -1
+      th densecap/run_model.lua -input_image ../currentImage/toCap.jpg -gpu -1 #(cant get gpu working yet, requires torch with cudnn4?)
       cd ..
       rm -f currentImage/toCap.jpg
 

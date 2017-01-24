@@ -18,7 +18,7 @@ act_layer=fc8     # fc8 because the LRCN extract fc8 features from AlexNet
 sentence="${1}"   # A sentence with underscores between words e.g. a_pizza_on_a_table_at_a_restaurant
 xy=0              # Spatial position for conv layers, for fc layers: xy = 0
 
-n_iters=20       # Run for N iterations
+n_iters=200       # Run for N iterations
 reset_every=0     # Reset the code every N iterations (for diversity). 0 to disable resetting.
 save_every=1      # Save a sample every N iterations. 0 to disable saving intermediate samples.
 lr=1              # Initial learning rate
@@ -51,8 +51,11 @@ if [ "${save_every}" -gt "0" ]; then
     mkdir -p ${sample_dir}
 fi
 
-## Run a few times
-# for seed in {0..2}; do
+#whats the number alread in the output dir
+
+number=$(find ${output_dir} -type f -name '*.gif' | wc -l)
+
+## Run generating script
 
     python sampling_caption.py \
         --act_layer ${act_layer} \
@@ -78,7 +81,7 @@ fi
     # Plot the samples
     if [ "${save_every}" -gt "0" ]; then
 
-        f_chain=${output_dir}/${sentence}
+        f_chain=${output_dir}/${number}
 
         # f_chain=${output_dir}/${sentence}__${seed}.jpg
 
@@ -96,8 +99,8 @@ fi
 # output_file=${output_dir}/${sentence}.jpg
 # montage ${output_dir}/${act_layer}_*.jpg ${output_file}
 
-mv -f ${output_dir}/${act_layer}_*.jpg ${output_dir}/static/${sentence}.jpg
-cp -f ${output_dir}/static/${sentence}.jpg ../currentImage/toCap.jpg
+mv -f ${output_dir}/${act_layer}_*.jpg ${output_dir}/static/${number}.jpg
+cp -f ${output_dir}/static/${number}.jpg ../currentImage/toCap.jpg
 rm -rf ${output_dir}/samples
 #readlink -f ${output_file}
 
@@ -106,6 +109,8 @@ rm -rf ${output_dir}/samples
 
 timestamp=$(date +%s)
 sentenceSpaces=$( echo "${sentence}" | tr '_' ' ')
+
+echo ${sentenceSpaces} > ${output_dir}/${number}.txt
 
 jsonData="{\"sentence\":\"${sentenceSpaces}\", \"gifPath\":\"genImages/${sentence}.gif\", \"staticImgPath\":\"genImages/static/${sentence}.jpg\", \"timecode\":\"${timestamp}\"},"
 
