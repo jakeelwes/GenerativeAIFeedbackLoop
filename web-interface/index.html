@@ -27,14 +27,14 @@
 <script>
 var number = 29;
 
-for (i = 0; i < 29; i++) {
+for (var i = 0; i < 29; i++) {
   $.ajax({
-      url : "genImages/"+number+".txt",
+      url : "genImages/"+i+".txt",
       dataType: "text",
       success : function (data) {
-        $("body").append('<div id=\"'+number+'\"> </div>')
-        $("#" + number).html("<br>" + data + "<br>");
-        $("#" + number).append('<img src="genImages/'+number+'.jpg" />');
+        $("body").append('<div id=\"'+i+'\"> </div>')
+        $("#" + i).html("<br>" + data + "<br>");
+        $("#" + i).append('<img src="genImages/'+i+'.jpg" />');
       }
   });
 }
