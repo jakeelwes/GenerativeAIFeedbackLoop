@@ -99,8 +99,8 @@ number=$(find ${output_dir} -type f -name '*.gif' | wc -l)
 # output_file=${output_dir}/${sentence}.jpg
 # montage ${output_dir}/${act_layer}_*.jpg ${output_file}
 
-mv -f ${output_dir}/${act_layer}_*.jpg ${output_dir}/static/${number}.jpg
-cp -f ${output_dir}/static/${number}.jpg ../currentImage/toCap.jpg
+mv -f ${output_dir}/${act_layer}_*.jpg ${output_dir}/${number}.jpg
+cp -f ${output_dir}/${number}.jpg ../currentImage/toCap.jpg
 rm -rf ${output_dir}/samples
 #readlink -f ${output_file}
 
@@ -112,7 +112,7 @@ sentenceSpaces=$( echo "${sentence}" | tr '_' ' ')
 
 echo ${sentenceSpaces} > ${output_dir}/${number}.txt
 
-jsonData="{\"sentence\":\"${sentenceSpaces}\", \"number\":${number}, \"gifPath\":\"genImages/${number}.gif\", \"staticImgPath\":\"genImages/static/${number}.jpg\", \"timecode\":${timestamp}},"
+jsonData="{\"sentence\":\"${sentenceSpaces}\", \"number\":${number}, \"gifPath\":\"genImages/${number}.gif\", \"staticImgPath\":\"genImages/${number}.jpg\", \"timecode\":${timestamp}},"
 
 echo $jsonData >> ../web-interface/results.json
 
