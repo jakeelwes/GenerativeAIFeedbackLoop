@@ -1,0 +1,9 @@
+2 windows -
+
+step 1: Window 1 - loads gif
+step 2: Window 1 - sits on static image, Window 2 - starts typing the densecap (which would be txt filenumber - 1)
+
+step 3: Window 1 clears, Window 2 - loads next gif (gen from densecap it just displayed)
+step 4: Window 2 - sits on static image, Window 1 - starts typing the next densecap
+
+ - loop
