@@ -3,3 +3,4 @@
 *.png
 *.gif
 *.sh.swp
+web-interface/genImages/*.txt

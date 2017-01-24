@@ -1,5 +1,7 @@
-<head>
+<html>
 
+<head>
+<title>AI Feedback</title>
 
 <script
   src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -9,11 +11,18 @@
   <style>
   body{
     text-align: center;
-    font-size: 40px;
-    font-family: Monospace
+    font-size: 25px;
+    font-family: Monospace;
+  }
+  div {
+    padding: 20px;
   }
   </style>
+
+  <script src="js/typed.js"></script>
+
 </head>
+
 
 
 <body>
@@ -26,25 +35,42 @@
 
 <script>
 
-for (var i = 0; i < 200; i++) {
+var counter =  Math.floor(Math.random() * 20);
+getData=function() {
   $.ajax({
-      url : "genImages/"+i+".txt",
+
+      url : "genImages/"+counter+".txt",
+      async: true,
       dataType: "text",
       success : function (data) {
-        $("body").append('<div id=\"'+i+'\"> </div>')
-        $("#" + i).html("<br>" + data + "<br>");
-        $("#" + i).append('<img src="genImages/'+i+'.jpg" />');
+
+        $("body").prepend('<div id=\"'+counter+'\"> </div>')
+        $("body").prepend('<div id=\"pic'+counter+'\"> </div>')
+
+        $("#" + counter).typed({
+              strings: [data],
+              typeSpeed: 40
+        });
+
+
+        setTimeout(function(){
+          $("#pic" + counter).prepend('<img id="gif" width="300px" src="genImages/'+counter+'.gif" />');
+        }, 3000);
+        setTimeout(function(){
+          $("#pic" + counter).prepend('<img width="300px" src="genImages/'+counter+'.jpg" />');
+          $("#gif").remove();
+          counter++;
+          getData();
+      }, 17000);
+
+
       }
   });
 }
-//   jQuery.get('genImages/'+number+'.txt', function(data) {
-//     console.out(data);
-//     // $( "body" ).append('<img src="genImages/'+number+'.png" />').append(data);
-//   });
 
+getData();
 
-
-  // var fileContents = "genImages/"+number+".txt".toURL().text;
 </script>
 
 </body>
+</html>
