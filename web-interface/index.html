@@ -32,10 +32,19 @@
   window.open('page2.html',"_blank",'PopUp',randomnumber,'scrollbars=1,menubar=0,resizable=1,width=850,height=500');
 </script> -->
 
+<div>
+<?php
+$fi = new FilesystemIterator(__DIR__, FilesystemIterator::SKIP_DOTS);
+printf("There were %d Files", iterator_count($fi));
+?>
+</div>
 
 <script>
 
-var counter =  Math.floor(Math.random() * 20);
+var counter =  Math.floor(Math.random() * 160);
+
+// var counter = 103;
+
 getData=function() {
   $.ajax({
 
@@ -64,6 +73,10 @@ getData=function() {
       }, 17000);
 
 
+    },
+      error: function(xhr, textStatus, errorThrown){
+         counter=0;
+         getData();
       }
   });
 }
