@@ -6,7 +6,6 @@ import processing.opengl.*;
 import processing.core.*; 
 import gifAnimation.*; 
 import java.io.FilenameFilter; 
-import fullscreen.*; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -22,7 +21,6 @@ public class AILoop2Window extends PApplet {
 
 
 
- 
 
 int counter;
 String spath = sketchPath("/Users/jakeelwes/Media/ArtWork/FinalYear/Synthesizing - Feedback Loop/GenerativeAIFeedbackLoop/web-interface/genImages/");

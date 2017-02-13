@@ -4,3 +4,4 @@
 *.gif
 *.sh.swp
 web-interface/genImages/*.txt
+processing-interface/AILoop2Window/build/*
