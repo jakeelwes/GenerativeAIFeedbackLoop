@@ -1,26 +1,6 @@
-import processing.core.*; 
-import processing.data.*; 
-import processing.event.*; 
-import processing.opengl.*; 
-
-import processing.core.*; 
-import gifAnimation.*; 
-import java.io.FilenameFilter; 
-
-import java.util.HashMap; 
-import java.util.ArrayList; 
-import java.io.File; 
-import java.io.BufferedReader; 
-import java.io.PrintWriter; 
-import java.io.InputStream; 
-import java.io.OutputStream; 
-import java.io.IOException; 
-
-public class AILoop1Window extends PApplet {
-
-
-
-
+import processing.core.*;
+import gifAnimation.*;
+import java.io.FilenameFilter;
 
 int counterA;
 String spath = sketchPath("/Users/jakeelwes/Media/ArtWork/FinalYear/Synthesizing - Feedback Loop/GenerativeAIFeedbackLoop/web-interface/genImages/");
@@ -42,14 +22,17 @@ PImage[] allFrames;
 int counterPause = 0;
 int counter = 0;
 
+int padding = 20;
+int squareSize;
 
 
-public void setup() {
+
+void setup() {
 
   surface.setResizable(true);
 
   frameRate(10);
-  
+  smooth();
   font = createFont("Courier", 48);
   textFont(font, 28);
 
@@ -60,7 +43,7 @@ public void setup() {
         }
       };
    String[] theList = imageDir.list(ff);
-   int fileCount = theList.length;
+  fileCount = theList.length;
    println(str(fileCount) + " image files");
 
    startingNum = (int) random(fileCount);
@@ -74,18 +57,28 @@ public void setup() {
    println(spath);
    allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
 
+   background(0);
+
+
 }
 
-public void settings(){
+void settings(){
   // fullScreen(); //2
-  size(1000, 600);
+
+  size(500, 800);
 
 }
 
-public void draw() {
+void draw() {
 
-  background(0);
+  // if(swap){
+  //   rotate(HALF_PI);
+  //   translate(0,-width);
+  // }
+
   fill(255);
+
+  squareSize = height/2 - 2*padding;
 
   // background(0);
 
@@ -101,35 +94,44 @@ public void draw() {
 
   if(counterPause < 260) {
     if (counter < 200) {
-      image(allFrames[counter], 0+border, 0+border, length-2*border, length-2*border);
+      tint(255, 80);
+      image(allFrames[counter], (width-squareSize)/2, padding, squareSize, squareSize);
     } else {
       if(counterPause == 200){
         imgDone = true;
       }
-      image(allFrames[200], 0+border, 0+border, length-2*border, length-2*border);
+      image(allFrames[200], (width-squareSize)/2, padding, squareSize, squareSize);
     }
   } else {
     counterPause = 0;
     counter = 0;
-    imgNumber = (imgNumber + 1) % startingNum;
+    imgNumber = (imgNumber + 1) % fileCount;
     // println("img " + imgNumber);
     allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
   }
 
+
+  fill(0);
+  rect((width-squareSize)/2 , height/2+padding/2, squareSize, squareSize);
+  fill(255);
   typewriteText(txtNumber);
 
 
   if (imgDone) {
     imgDone = false;
-    txtNumber = (txtNumber + 1) % startingNum;
+    txtNumber = (txtNumber + 1) % fileCount;
     // println ("text " + txtNumber);
     counterA = 0;
   }
   // popMatrix();
+
+  // rect(padding, (height-squareSize)/2, squareSize, squareSize);
+
+
 }
 
 
-public void typewriteText(int txtNumber){
+void typewriteText(int txtNumber){
 
   String lines[] = loadStrings(spath + txtNumber + ".txt");
   line = lines[0];
@@ -137,21 +139,9 @@ public void typewriteText(int txtNumber){
   if (counterA < line.length()){
     counterA++;
   }
-  if (width<height){
-    text(line.substring(0, counterA), 0, length+((height-length)/2), width, length+((height-length)/2));
-    textAlign(CENTER);
-  } else if (height<width) {
-    text(line.substring(0, counterA), length + (width-length)/5  , height/2, width, height);
-    textAlign(LEFT);
-  }
 
-}
-  static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "AILoop1Window" };
-    if (passedArgs != null) {
-      PApplet.main(concat(appletArgs, passedArgs));
-    } else {
-      PApplet.main(appletArgs);
-    }
-  }
+  text(line.substring(0, counterA), (width-squareSize)/2 , height/2+padding/2, squareSize, squareSize);
+  textAlign(CENTER, CENTER);
+
+
 }

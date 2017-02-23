@@ -40,11 +40,11 @@ void setup() {
         }
       };
    String[] theList = imageDir.list(ff);
-   int fileCount = theList.length;
+  fileCount = theList.length;
    println(str(fileCount) + " image files");
 
-   startingNum = (int) random(fileCount);
-   // startingNum = 161;
+  //  startingNum = (int) random(fileCount);
+   startingNum = 466;
    imgNumber = startingNum;
    txtNumber = startingNum;
 
@@ -91,7 +91,7 @@ void draw() {
   } else {
     counterPause = 0;
     counter = 0;
-    imgNumber = (imgNumber + 1) % startingNum;
+    imgNumber = (imgNumber + 1) % fileCount;
     // println("img " + imgNumber);
     allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
   }
@@ -101,7 +101,8 @@ void draw() {
 
   if (imgDone) {
     imgDone = false;
-    txtNumber = (txtNumber + 1) % startingNum;
+    println(txtNumber);
+    txtNumber = (txtNumber + 1) % fileCount;
     // println ("text " + txtNumber);
     counterA = 0;
   }

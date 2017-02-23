@@ -16,7 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream; 
 import java.io.IOException; 
 
-public class OneWindowParallel extends PApplet {
+public class OneWindowFull extends PApplet {
 
 
 
@@ -42,11 +42,6 @@ PImage[] allFrames;
 int counterPause = 0;
 int counter = 0;
 
-int padding = 20;
-int squareSize;
-
-boolean black = true;
-
 
 
 public void setup() {
@@ -68,8 +63,8 @@ public void setup() {
   fileCount = theList.length;
    println(str(fileCount) + " image files");
 
-   startingNum = (int) random(fileCount);
-   // startingNum = 161;
+  //  startingNum = (int) random(fileCount);
+   startingNum = 466;
    imgNumber = startingNum;
    txtNumber = startingNum;
 
@@ -78,33 +73,19 @@ public void setup() {
    // String spath = sketchPath("/Users/jakeelwes/Media/ArtWork/FinalYear/Synthesizing - Feedback Loop/GenerativeAIFeedbackLoop/web-interface/genImages/");
    println(spath);
    allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
-   if (!black) {
-     background(255);
-   } else {
-     background(0);
-   }
-
 
 }
 
 public void settings(){
-  fullScreen(); //2
-
-  // size(1000, 600);
+  // fullScreen(); //2
+  size(1000, 600);
 
 }
 
 public void draw() {
 
-  noCursor();
-
-  if (!black) {
-    fill(0);
-  } else {
-    fill(255);
-  }
-
-  squareSize = width/3 - 2*padding;
+  background(0);
+  fill(255);
 
   // background(0);
 
@@ -120,36 +101,21 @@ public void draw() {
 
   if(counterPause < 260) {
     if (counter < 200) {
-      tint(255, 80);
-      image(allFrames[counter], width/2 - squareSize - padding, (height-squareSize)/2, squareSize, squareSize);
+      image(allFrames[counter], 0+border, 0+border, length-2*border, length-2*border);
     } else {
       if(counterPause == 200){
         imgDone = true;
       }
-      image(allFrames[200], width/2 - squareSize -  padding, (height-squareSize)/2, squareSize, squareSize);
+      image(allFrames[200], 0+border, 0+border, length-2*border, length-2*border);
     }
   } else {
     counterPause = 0;
     counter = 0;
-    println(imgNumber);
     imgNumber = (imgNumber + 1) % fileCount;
     // println("img " + imgNumber);
     allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
   }
 
-
-  if (!black) {
-    fill(255);
-  } else {
-    fill(0);
-  }
-  noStroke();
-  rect(width/2+padding/2, (height-squareSize)/2, squareSize, squareSize);
-  if (!black) {
-    fill(0);
-  } else {
-    fill(255);
-  }
   typewriteText(txtNumber);
 
 
@@ -161,10 +127,6 @@ public void draw() {
     counterA = 0;
   }
   // popMatrix();
-
-  // rect(padding, (height-squareSize)/2, squareSize, squareSize);
-
-
 }
 
 
@@ -172,19 +134,21 @@ public void typewriteText(int txtNumber){
 
   String lines[] = loadStrings(spath + txtNumber + ".txt");
   line = lines[0];
-  // line = Integer.toString(startingNum);
 
   if (counterA < line.length()){
     counterA++;
   }
-
-  text(line.substring(0, counterA), width/2+padding/2, (height-squareSize)/2, squareSize, squareSize);
-  textAlign(CENTER, CENTER);
-
+  if (width<height){
+    text(line.substring(0, counterA), 0, length+((height-length)/2), width, length+((height-length)/2));
+    textAlign(CENTER);
+  } else if (height<width) {
+    text(line.substring(0, counterA), length + (width-length)/5  , height/2, width, height);
+    textAlign(LEFT);
+  }
 
 }
   static public void main(String[] passedArgs) {
-    String[] appletArgs = new String[] { "OneWindowParallel" };
+    String[] appletArgs = new String[] { "OneWindowFull" };
     if (passedArgs != null) {
       PApplet.main(concat(appletArgs, passedArgs));
     } else {

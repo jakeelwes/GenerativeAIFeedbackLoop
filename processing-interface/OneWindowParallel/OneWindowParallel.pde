@@ -22,6 +22,11 @@ PImage[] allFrames;
 int counterPause = 0;
 int counter = 0;
 
+int padding = 20;
+int squareSize;
+
+boolean black = true;
+
 
 
 void setup() {
@@ -40,11 +45,11 @@ void setup() {
         }
       };
    String[] theList = imageDir.list(ff);
-   int fileCount = theList.length;
+  fileCount = theList.length;
    println(str(fileCount) + " image files");
 
-   startingNum = (int) random(fileCount);
-   // startingNum = 161;
+  //  startingNum = (int) random(fileCount);
+   startingNum = 54;
    imgNumber = startingNum;
    txtNumber = startingNum;
 
@@ -53,22 +58,33 @@ void setup() {
    // String spath = sketchPath("/Users/jakeelwes/Media/ArtWork/FinalYear/Synthesizing - Feedback Loop/GenerativeAIFeedbackLoop/web-interface/genImages/");
    println(spath);
    allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
-
-   background(0);
+   if (!black) {
+     background(255);
+   } else {
+     background(0);
+   }
 
 
 }
 
 void settings(){
-  // fullScreen(); //2
+  fullScreen(); //2
 
-  size(1000, 600);
+  // size(1000, 600);
 
 }
 
 void draw() {
 
-  fill(255);
+  noCursor();
+
+  if (!black) {
+    fill(0);
+  } else {
+    fill(255);
+  }
+
+  squareSize = width/3 - 2*padding;
 
   // background(0);
 
@@ -84,34 +100,50 @@ void draw() {
 
   if(counterPause < 260) {
     if (counter < 200) {
-       tint(255, 127);
-      image(allFrames[counter], 0+border, 0+border, length-2*border, length-2*border);
+      tint(255, 80);
+      image(allFrames[counter], width/2 - squareSize - padding, (height-squareSize)/2, squareSize, squareSize);
     } else {
       if(counterPause == 200){
         imgDone = true;
       }
-      image(allFrames[200], 0+border, 0+border, length-2*border, length-2*border);
+      image(allFrames[200], width/2 - squareSize -  padding, (height-squareSize)/2, squareSize, squareSize);
     }
   } else {
     counterPause = 0;
     counter = 0;
-    imgNumber = (imgNumber + 1) % startingNum;
+    println(imgNumber);
+    imgNumber = (imgNumber + 1) % fileCount;
     // println("img " + imgNumber);
     allFrames = Gif.getPImages(this, spath + imgNumber + ".gif");
   }
 
+
+  if (!black) {
+    fill(255);
+  } else {
+    fill(0);
+  }
+  noStroke();
+  rect(width/2+padding/2, (height-squareSize)/2, squareSize, squareSize);
+  if (!black) {
+    fill(0);
+  } else {
+    fill(255);
+  }
   typewriteText(txtNumber);
 
 
   if (imgDone) {
     imgDone = false;
-    txtNumber = (txtNumber + 1) % startingNum;
+    println(txtNumber);
+    txtNumber = (txtNumber + 1) % fileCount;
     // println ("text " + txtNumber);
     counterA = 0;
   }
   // popMatrix();
 
-  // rect()
+  // rect(padding, (height-squareSize)/2, squareSize, squareSize);
+
 
 }
 
@@ -120,16 +152,14 @@ void typewriteText(int txtNumber){
 
   String lines[] = loadStrings(spath + txtNumber + ".txt");
   line = lines[0];
+  // line = Integer.toString(startingNum);
 
   if (counterA < line.length()){
     counterA++;
   }
-  if (width<height){
-    text(line.substring(0, counterA), 0, length+((height-length)/2), width, length+((height-length)/2));
-    textAlign(CENTER);
-  } else if (height<width) {
-    text(line.substring(0, counterA), length + (width-length)/5  , height/2, width, height);
-    textAlign(LEFT);
-  }
+
+  text(line.substring(0, counterA), width/2+padding/2, (height-squareSize)/2, squareSize, squareSize);
+  textAlign(CENTER, CENTER);
+
 
 }
